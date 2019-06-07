@@ -1,0 +1,28 @@
+{
+  "name": "yapay_frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "document-register-element": "^1.13.2",
+    "vue": "^2.6.10",
+    "vue-custom-element": "^3.2.7",
+    "webpack": "^4.33.0"
+  },
+  "devDependencies": {
+    "@vue/cli-service": "^3.8.0",
+    "vue-template-compiler": "^2.6.10"
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ]
+}
