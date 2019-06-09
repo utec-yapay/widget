@@ -1,4 +1,11 @@
-# yapay_frontend
+# Yapay Button Widget
+
+## How to use it
+TODO
+
+## Dependencies
+We are using axios for the HTTP requests and qrcode.vue to transform string data into qr format
+
 
 ## Project setup
 ```
@@ -14,16 +21,3 @@ npm run serve
 ```
 npm run build
 ```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
