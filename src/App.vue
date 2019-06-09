@@ -8,37 +8,40 @@
 					<div class="exit">
 						<button v-on:click="togglePopup()">&times;</button>
 					</div>
-					<div class="payWithYape">Pay With Yape</div>
-					<div style="display:inline-block; vertical-align:top;">
-						<qrcode-vue
-							v-if="showQr"
-							:value="qrValue"
-							:size="200">
-						</qrcode-vue>
-						<img
-							v-if="!showQr" 
-							src="@/assets/loading.gif"
-							alt="QR Placeholder"
-							height="200px"
-						/>
-					</div>
-					<div style="display:inline-block; padding: 30px">
-						<div>1. Entra a Yape desde tu smartphone</div>
-						<div>2. Ingresa a Yape con tu clave de 6 d&iacutegitos</div>
-						<div>3. Haz click en el bot&oacuten con el s&iacutembolo QR</div>
-						<div>4. Alinea el c&oacutedigo QR con el cuadrado</div>
-						<div>5. Confirma tu pedido</div>
-					</div>
+					<div v-if="!confirmed">
+						<div class="payWithYape">Pay With Yape</div>
+						<div style="display:inline-block; vertical-align:top;">
+							<qrcode-vue
+								v-if="showQr"
+								:value="qrValue"
+								:size="200">
+							</qrcode-vue>
+							<img
+								v-if="!showQr" 
+								src="@/assets/loading.gif"
+								alt="QR Placeholder"
+								height="200px"
+							/>
+						</div>
+						<div style="display:inline-block; padding: 30px">
+							<div>1. Entra a Yape desde tu smartphone</div>
+							<div>2. Ingresa a Yape con tu clave de 6 d&iacutegitos</div>
+							<div>3. Haz click en el bot&oacuten con el s&iacutembolo QR</div>
+							<div>4. Alinea el c&oacutedigo QR con el cuadrado</div>
+							<div>5. Confirma tu pedido</div>
+						</div>
 
-					<div>
-						<p>Yape disponible en:</p>
-						<a target="_blank" href="https://itunes.apple.com/pe/app/yape/id1147249919">
-							<img src="@/assets/app_store.png" alt="App Store Button" width="100px"/>
-						</a>
-						<a target="_blank" href="https://play.google.com/store/apps/details?id=com.bcp.innovacxion.yapeapp">
-							<img src="@/assets/google_play.png" alt="Google Play Button" width="100px"/>
-						</a>
+						<div>
+							<p>Yape disponible en:</p>
+							<a target="_blank" href="https://itunes.apple.com/pe/app/yape/id1147249919">
+								<img src="@/assets/app_store.png" alt="App Store Button" width="100px"/>
+							</a>
+							<a target="_blank" href="https://play.google.com/store/apps/details?id=com.bcp.innovacxion.yapeapp">
+								<img src="@/assets/google_play.png" alt="Google Play Button" width="100px"/>
+							</a>
+						</div>
 					</div>
+					<h2 v-if="confirmed">Confirmed!</h2>
 				</div>
 			</div>
 		</div>
@@ -49,6 +52,10 @@
 import QrcodeVue from 'qrcode.vue'
 import axios from 'axios'
 
+// We store the reference to the SSE object out here
+// so we can access it from other methods
+let sseServer
+
 export default {
   name: 'app',
   components: {
@@ -57,17 +64,15 @@ export default {
   data() {
   	return {
   		showPopup: false,
-  		qrValue: ""
+  		qrValue: "",
+  		showQr: false,
+  		confirmed: false
   	}
   },
   methods: {
   	togglePopup: function() {
-  		console.log("showPopup: " + this.showPopup)
-  		console.log("qrValue: " + this.qrValue)
   		this.showPopup = !this.showPopup
   		this.getQr()
-  		console.log("showPopup: " + this.showPopup)
-  		console.log("qrValue: " + this.qrValue)
   	},
   	getQr: function(id) {
   		const paymentUrl = "http://localhost:8080/payments"
@@ -77,18 +82,52 @@ export default {
 	    	"companyPhone": "993321323",
 		  }
 		  let self = this
-		  self.qrValue = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-			self.showQr = true
-		  /*axios.post(paymentUrl, data)
+		  
+		  axios.post(paymentUrl, data)
 		  	.then(response => {
 		  		console.log(JSON.stringify(response.data, null, 2))
-					self.qrValue = response.jwt
+					self.qrValue = response.data
 					self.showQr = true
+					self.openSseConnection(123)
 		  	})
 		  	.catch(error =>{
-		  		console.log(JSON.stringify(error.response, null, 2))
-		  	})*/
+		  		console.log("error: " + error)
+		  	})
+		  
+  	},
+  	openSseConnection: function(id) {
+  		let eventsEndpoint = "http://localhost:8080/confirmEvent/" + id.toString()
+  		let self = this
+	  	this.$sse(eventsEndpoint)
+	  		.then(sse => {
+	  			self.sseServer = sse
+
+	  			sse.onError(error => {
+	  				console.log("Lost connection. Closing SSE server", error)
+	  				sse.close()
+	  			})
+
+	  			sse.subscribe('yapay-confirm-payment', (signal) => {
+	  				console.log("signal: " + signal)
+	  				self.confirmed = true
+	  			})
+	  			console.log("Suscribed to signals")
+	  		})
+	  		.catch(error => {
+	  			// When this error is caught, it means the initial connection to the
+	        // events server failed.  No automatic attempts to reconnect will be made.
+	        console.log('Failed to connect to server', err);
+	  		})
   	}
+  },
+  mounted() {
+  	
+
+  },
+  beforeDestroy() {
+  	// Make sure to close the connection with the events server
+    // when the component is destroyed, or we'll have ghost connections!
+    sseServer.close();
   }
 }
 </script>
