@@ -4,7 +4,7 @@
 TODO
 
 ## Dependencies
-We are using axios for the HTTP requests and qrcode.vue to transform string data into qr format
+We are using [axios](https://www.npmjs.com/package/axios) for the HTTP requests and [qrcode.vue](https://www.npmjs.com/package/qrcode.vue) to transform string data into qr format
 
 
 ## Project setup
