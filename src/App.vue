@@ -1,16 +1,30 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed');
+
 <template>
   <div id="app">
 		<button @click="togglePopup()">Pay with Yapay</button>
 
 		<div v-if="showPopup" id="popupBoxOnePosition">
-			<div class="popupBoxWrapper">
-				<div class="popupBoxContent">
+			<div class="popupBoxContent">
+				<div style="background: #00d0b6; width: 50%; float: right; padding: 10px;">
 					<div class="exit">
-						<button v-on:click="togglePopup()">&times;</button>
+						<a href="#" style="text-decoration: none; color: black;" onclick="toggle_visibility('popupBoxOnePosition');">&times;</a>
 					</div>
-					<div v-if="!confirmed">
-						<div class="payWithYape">Pay With Yape</div>
-						<div style="display:inline-block; vertical-align:top;">
+				</div>
+				<div v-if="!confirmed">
+					<div class="column" style="background: #00d0b6">
+						<img src="@/assets/yape_logo.png" style="display: block; margin-left: auto; margin-right: auto; width: 25%;">
+						<div style="display:inline-block; padding: 30px">
+							<div>1. Entra a Yape desde tu smartphone</div>
+							<div>2. Ingresa a Yape con tu clave de 6 d&iacutegitos</div>
+							<div>3. Haz click en el bot&oacuten con el s&iacutembolo QR</div>
+							<div>4. Alinea el c&oacutedigo QR con el cuadrado</div>
+							<div>5. Confirma tu pedido</div>
+						</div>
+					</div>
+
+					<div style="padding-left: 15px">
+						<div style="vertical-align:top; align-content: center; padding-left: 0px">
 							<qrcode-vue
 								v-if="showQr"
 								:value="qrValue"
@@ -23,14 +37,6 @@
 								height="200px"
 							/>
 						</div>
-						<div style="display:inline-block; padding: 30px">
-							<div>1. Entra a Yape desde tu smartphone</div>
-							<div>2. Ingresa a Yape con tu clave de 6 d&iacutegitos</div>
-							<div>3. Haz click en el bot&oacuten con el s&iacutembolo QR</div>
-							<div>4. Alinea el c&oacutedigo QR con el cuadrado</div>
-							<div>5. Confirma tu pedido</div>
-						</div>
-
 						<div>
 							<p>Yape disponible en:</p>
 							<a target="_blank" href="https://itunes.apple.com/pe/app/yape/id1147249919">
@@ -41,8 +47,8 @@
 							</a>
 						</div>
 					</div>
-					<h2 v-if="confirmed">Confirmed!</h2>
 				</div>
+				<h2 v-if="confirmed">Confirmed!</h2>
 			</div>
 		</div>
   </div>
@@ -133,19 +139,21 @@ export default {
 }
 </script>
 <style>
+*{
+		font-family: 'Roboto', sans-serif;
+}
+						
 #popupBoxOnePosition{
     top: 0; left: 0; position: fixed; width: 100%; height: 120%;
     background-color: rgba(0,0,0,0.7);
 }
-.popupBoxWrapper{
-    width: 750px; margin: 50px auto;
-}
 .popupBoxContent{
-    background-color: #FFF; padding: 15px;
+		background-color: #FFF;
+		width: 750px; margin: 50px auto;
 }
 .exit {
     text-align: right;
-    font-size: 20px;
+    font-size: 25px;
 }
 .payWithYape{
     text-align: center;
@@ -168,5 +176,11 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.column{
+		float: right;
+		width: 50%;
+		padding: 10px;
+		height: 220px;
 }
 </style>
