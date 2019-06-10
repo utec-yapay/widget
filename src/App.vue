@@ -1,12 +1,12 @@
 <template>
   <div id="app">
-		<button @click="togglePopup()">Pay with Yapay</button>
+		<button @click="openPopup()">Pay with Yapay</button>
 
 		<div v-if="showPopup" id="popupBoxOnePosition">
 			<div class="popupBoxWrapper">
 				<div class="popupBoxContent">
 					<div class="exit">
-						<button v-on:click="togglePopup()">&times;</button>
+						<button v-on:click="closePopup()">&times;</button>
 					</div>
 					<div v-if="!confirmed">
 						<div class="payWithYape">Pay With Yape</div>
@@ -70,14 +70,18 @@ export default {
   	}
   },
   methods: {
-  	togglePopup: function() {
-  		this.showPopup = !this.showPopup
+  	openPopup: function() {
+  		this.showPopup = true
+  		console.log("openpopup start")
   		this.getQr()
-  		if (this.confirmed) {
-  			this.confirmed = false
-  		}
+  	},
+  	closePopup: function() {
+  		this.showPopup = false
+  		console.log(sseServer)
+  		sseServer.close()
   	},
   	getQr: function(id) {
+  		console.log("getqr start")
   		const paymentUrl = "http://localhost:8080/payments"
   		let data = {
 	    	"amt": 100,
@@ -99,11 +103,13 @@ export default {
 		  
   	},
   	openSseConnection: function(id) {
+  		console.log("openSseConnection start")
   		let eventsEndpoint = "http://localhost:8080/confirmEvent/" + id.toString()
   		let self = this
 	  	this.$sse(eventsEndpoint)
 	  		.then(sse => {
-	  			self.sseServer = sse
+	  			sseServer = sse
+	  			console.log("sse asigned")
 
 	  			sse.onError(error => {
 	  				console.log("Lost connection. Trying to reconnect...", error)
