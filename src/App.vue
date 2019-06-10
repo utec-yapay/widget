@@ -73,6 +73,9 @@ export default {
   	togglePopup: function() {
   		this.showPopup = !this.showPopup
   		this.getQr()
+  		if (this.confirmed) {
+  			this.confirmed = false
+  		}
   	},
   	getQr: function(id) {
   		const paymentUrl = "http://localhost:8080/payments"
@@ -103,15 +106,17 @@ export default {
 	  			self.sseServer = sse
 
 	  			sse.onError(error => {
-	  				console.log("Lost connection. Closing SSE server", error)
-	  				sse.close()
+	  				console.log("Lost connection. Trying to reconnect...", error)
+	  				self.confirmed = false
+	  				//sse.close()
 	  			})
 
 	  			sse.subscribe('yapay-confirm-payment', (signal) => {
-	  				console.log("signal: " + signal)
+	  				console.log("Received signal: " + signal)
+	  				console.log("Closing connection...")
 	  				self.confirmed = true
+	  				sse.close()
 	  			})
-	  			console.log("Suscribed to signals")
 	  		})
 	  		.catch(error => {
 	  			// When this error is caught, it means the initial connection to the
@@ -119,10 +124,6 @@ export default {
 	        console.log('Failed to connect to server', err);
 	  		})
   	}
-  },
-  mounted() {
-  	
-
   },
   beforeDestroy() {
   	// Make sure to close the connection with the events server
