@@ -13,7 +13,9 @@
     "qrcode.vue": "^1.6.2",
     "vue": "^2.6.10",
     "vue-custom-element": "^3.2.7",
+    "vue-jwt-decode": "^0.1.0",
     "vue-sse": "^1.0.2",
+    "vuejs-jwt": "^1.1.0",
     "webpack": "^4.33.0"
   },
   "devDependencies": {

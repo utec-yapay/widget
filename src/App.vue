@@ -2,13 +2,13 @@
 
 <template>
   <div id="app">
-		<button @click="togglePopup()">Pay with Yapay</button>
+		<button @click="openPopup()">Pay with Yapay</button>
 
 		<div v-if="showPopup" id="popupBoxOnePosition">
 			<div class="popupBoxContent">
 				<div style="background: #00d0b6; width: 50%; float: right; padding: 10px;">
 					<div class="exit">
-						<a href="#" style="text-decoration: none; color: black;" onclick="toggle_visibility('popupBoxOnePosition');">&times;</a>
+						<a href="#" style="text-decoration: none; color: black;" v-on:click="closePopup()">&times;</a>
 					</div>
 				</div>
 				<div v-if="!confirmed">
@@ -48,7 +48,7 @@
 						</div>
 					</div>
 				</div>
-				<h2 v-if="confirmed">Confirmed!</h2>
+				<h2 v-if="confirmed"><a href="confirmation.html"></a></h2>
 			</div>
 		</div>
   </div>
@@ -57,6 +57,7 @@
 <script>
 import QrcodeVue from 'qrcode.vue'
 import axios from 'axios'
+import VueJwtDecode from 'vue-jwt-decode'
 
 // We store the reference to the SSE object out here
 // so we can access it from other methods
@@ -76,19 +77,23 @@ export default {
   	}
   },
   methods: {
-  	togglePopup: function() {
-  		this.showPopup = !this.showPopup
+  	openPopup: function() {
+  		this.showPopup = true
+  		console.log("openpopup start")
   		this.getQr()
-  		if (this.confirmed) {
-  			this.confirmed = false
-  		}
   	},
-  	getQr: function(id) {
+  	closePopup: function() {
+  		this.showPopup = false
+  		console.log(sseServer)
+  		sseServer.close()
+  	},
+  	getQr: function() {
+  		console.log("getqr start")
   		const paymentUrl = "http://localhost:8080/payments"
   		let data = {
-	    	"amount": 100,
-	    	"companyName": "drimer",
-	    	"companyPhone": "993321323",
+	    	"amt": 100,
+	    	"cpn": "drimer",
+	    	"cpp": "993321323",
 		  }
 		  let self = this
 		  
@@ -97,7 +102,9 @@ export default {
 		  		console.log(JSON.stringify(response.data, null, 2))
 					self.qrValue = response.data
 					self.showQr = true
-					self.openSseConnection(123)
+					let decoded = VueJwtDecode.decode(response.data)
+					console.log(decoded)
+					self.openSseConnection(decoded.pid)
 		  	})
 		  	.catch(error =>{
 		  		console.log("error: " + error)
@@ -105,11 +112,13 @@ export default {
 		  
   	},
   	openSseConnection: function(id) {
+  		console.log("openSseConnection start")
   		let eventsEndpoint = "http://localhost:8080/confirmEvent/" + id.toString()
   		let self = this
 	  	this.$sse(eventsEndpoint)
 	  		.then(sse => {
-	  			self.sseServer = sse
+	  			sseServer = sse
+	  			console.log("sse asigned")
 
 	  			sse.onError(error => {
 	  				console.log("Lost connection. Trying to reconnect...", error)
