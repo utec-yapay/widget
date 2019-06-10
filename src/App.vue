@@ -6,12 +6,13 @@
 
 		<div v-if="showPopup" id="popupBoxOnePosition">
 			<div class="popupBoxContent">
+				<div v-if="!confirmed">
 				<div style="background: #00d0b6; width: 50%; float: right; padding: 10px;">
 					<div class="exit">
 						<a href="#" style="text-decoration: none; color: black;" v-on:click="closePopup()">&times;</a>
 					</div>
 				</div>
-				<div v-if="!confirmed">
+				
 					<div class="column" style="background: #00d0b6">
 						<img src="@/assets/yape_logo.png" style="display: block; margin-left: auto; margin-right: auto; width: 25%;">
 						<div style="display:inline-block; padding: 30px">
@@ -28,7 +29,7 @@
 							<qrcode-vue
 								v-if="showQr"
 								:value="qrValue"
-								:size="200">
+								:size="100">
 							</qrcode-vue>
 							<img
 								v-if="!showQr" 
@@ -48,7 +49,7 @@
 						</div>
 					</div>
 				</div>
-				<h2 v-if="confirmed"><a href="confirmation.html"></a></h2>
+				<h2 v-if="confirmed">Confirmed</h2>
 			</div>
 		</div>
   </div>
