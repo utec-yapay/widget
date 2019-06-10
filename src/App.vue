@@ -80,7 +80,7 @@ export default {
   		console.log(sseServer)
   		sseServer.close()
   	},
-  	getQr: function(id) {
+  	getQr: function() {
   		console.log("getqr start")
   		const paymentUrl = "http://localhost:8080/payments"
   		let data = {
@@ -95,7 +95,7 @@ export default {
 		  		console.log(JSON.stringify(response.data, null, 2))
 					self.qrValue = response.data
 					self.showQr = true
-					self.openSseConnection(123)
+					self.openSseConnection(response.data.pid)
 		  	})
 		  	.catch(error =>{
 		  		console.log("error: " + error)
