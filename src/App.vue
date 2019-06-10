@@ -51,6 +51,7 @@
 <script>
 import QrcodeVue from 'qrcode.vue'
 import axios from 'axios'
+import VueJwtDecode from 'vue-jwt-decode'
 
 // We store the reference to the SSE object out here
 // so we can access it from other methods
@@ -95,7 +96,8 @@ export default {
 		  		console.log(JSON.stringify(response.data, null, 2))
 					self.qrValue = response.data
 					self.showQr = true
-					self.openSseConnection(response.data.pid)
+					let decoded = this.$jwtDec(response.data)
+					self.openSseConnection(.pid)
 		  	})
 		  	.catch(error =>{
 		  		console.log("error: " + error)
