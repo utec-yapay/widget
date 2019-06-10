@@ -97,7 +97,7 @@ export default {
 					self.qrValue = response.data
 					self.showQr = true
 					let decoded = this.$jwtDec(response.data)
-					self.openSseConnection(.pid)
+					self.openSseConnection(decoded.pid)
 		  	})
 		  	.catch(error =>{
 		  		console.log("error: " + error)
