@@ -80,9 +80,9 @@ export default {
   	getQr: function(id) {
   		const paymentUrl = "http://localhost:8080/payments"
   		let data = {
-	    	"amount": 100,
-	    	"companyName": "drimer",
-	    	"companyPhone": "993321323",
+	    	"amt": 100,
+	    	"cpn": "drimer",
+	    	"cpp": "993321323",
 		  }
 		  let self = this
 		  
