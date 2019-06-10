@@ -96,7 +96,8 @@ export default {
 		  		console.log(JSON.stringify(response.data, null, 2))
 					self.qrValue = response.data
 					self.showQr = true
-					let decoded = this.$jwtDec(response.data)
+					let decoded = VueJwtDecode.decode(response.data)
+					console.log(decoded)
 					self.openSseConnection(decoded.pid)
 		  	})
 		  	.catch(error =>{
