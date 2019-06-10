@@ -29,7 +29,7 @@
 							<qrcode-vue
 								v-if="showQr"
 								:value="qrValue"
-								:size="100">
+								:size="200">
 							</qrcode-vue>
 							<img
 								v-if="!showQr" 
