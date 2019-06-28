@@ -6,6 +6,7 @@
 
 		<div v-if="showPopup" id="popupBoxOnePosition">
 			<div class="popupBoxContent">
+				<p>jwt: {{ $root.paymentjwt }}</p>
 				<div v-if="!confirmed">
 				<div style="background: #00d0b6; width: 50%; float: right; padding: 10px;">
 					<div class="exit">
@@ -71,7 +72,7 @@ import company_info from '../new_company.json'
 let sseServer
 
 export default {
-  props: ['paymentJwt'],
+  props: ['paymentjwt'],
   name: 'app',
   components: {
     QrcodeVue
@@ -97,37 +98,10 @@ export default {
   		sseServer.close()
   	},
   	getQr: function() {
-  		/*
-		console.log("Company info")
-		console.log(company_info)
-		this.cinfo = company_info
-		console.log(this.cinfo.company)
-		console.log("End company info")
-  		console.log("getqr start")
-  		const paymentUrl = "http://localhost:8080/payments"
-  		let data = {
-	    	"amt": 100,
-	    	"cpn": company_info["company"],
-	    	"cpp": company_info["phone"],
-			}
-		  let self = this
-		  
-		  axios.post(paymentUrl, data)
-		  	.then(response => {
-		  		console.log(JSON.stringify(response.data, null, 2))
-					self.qrValue = response.data
-					self.showQr = true
-					let decoded = VueJwtDecode.decode(response.data)
-					console.log(decoded)
-					self.openSseConnection(decoded.pid)
-		  	})
-		  	.catch(error =>{
-		  		console.log("error: " + error)
-		  	})
-		 */
-		this.qrValue = $root.paymentJwt
+		console.log(this.paymentjwt)
+		this.qrValue = this.paymentjwt
 		this.showQr = true
-		let decoded = VueJwtDecode.decode($root.paymentJwt)
+		let decoded = VueJwtDecode.decode(this.paymentjwt)
 		console.log(decoded)
 		this.openSseConnection(decoded.pid)
   	},
