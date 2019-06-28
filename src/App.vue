@@ -2,7 +2,7 @@
 
 <template>
   <div id="app">
-		<button @click="openPopup()">Pay with Yapay</button>
+		<button @click="openPopup()">Yapay</button>
 
 		<div v-if="showPopup" id="popupBoxOnePosition">
 			<div class="popupBoxContent">
@@ -24,13 +24,16 @@
 						</div>
 					</div>
 
-					<div style="padding-left: 15px">
-						<div style="vertical-align:top; align-content: center; padding-left: 0px">
+					<div style="padding-left: 20px; padding-top: 20px">
+						<div style="display: inline-block;">
 							<qrcode-vue
 								v-if="showQr"
 								:value="qrValue"
 								:size="200">
 							</qrcode-vue>
+							<div>
+								
+							</div>
 							<img
 								v-if="!showQr" 
 								src="@/assets/loading.gif"
@@ -41,24 +44,27 @@
 						<div>
 							<p>Yape disponible en:</p>
 							<a target="_blank" href="https://itunes.apple.com/pe/app/yape/id1147249919">
-								<img src="@/assets/app_store.png" alt="App Store Button" width="100px"/>
+								<img src="@/assets/app_store.png" alt="App Store on" width="100px"/>
 							</a>
 							<a target="_blank" href="https://play.google.com/store/apps/details?id=com.bcp.innovacxion.yapeapp">
-								<img src="@/assets/google_play.png" alt="Google Play Button" width="100px"/>
+								<img src="@/assets/google_play.png" alt="Google Play on" width="100px"/>
 							</a>
 						</div>
 					</div>
 				</div>
-				<h2 v-if="confirmed">Confirmed</h2>
+				<a :href="cinfo['confirmation_url']" v-if="confirmed">Confirmed, click to continue</a>
 			</div>
 		</div>
   </div>
 </template>
 
 <script>
+//../dummy_ecommerce/templates/confirmation.html
+
 import QrcodeVue from 'qrcode.vue'
 import axios from 'axios'
 import VueJwtDecode from 'vue-jwt-decode'
+import company_info from '../new_company.json'
 
 // We store the reference to the SSE object out here
 // so we can access it from other methods
@@ -68,13 +74,14 @@ export default {
   name: 'app',
   components: {
     QrcodeVue
-  },
+	},
   data() {
   	return {
   		showPopup: false,
   		qrValue: "",
   		showQr: false,
-  		confirmed: false
+			confirmed: false, //change to false later
+			cinfo: null
   	}
   },
   methods: {
@@ -89,13 +96,18 @@ export default {
   		sseServer.close()
   	},
   	getQr: function() {
+			console.log("Company info")
+			console.log(company_info)
+			this.cinfo = company_info
+			console.log(this.cinfo.company)
+			console.log("End company info")
   		console.log("getqr start")
   		const paymentUrl = "http://localhost:8080/payments"
   		let data = {
 	    	"amt": 100,
-	    	"cpn": "drimer",
-	    	"cpp": "993321323",
-		  }
+	    	"cpn": company_info["company"],
+	    	"cpp": company_info["phone"],
+			}
 		  let self = this
 		  
 		  axios.post(paymentUrl, data)
@@ -145,7 +157,7 @@ export default {
   	// Make sure to close the connection with the events server
     // when the component is destroyed, or we'll have ghost connections!
     sseServer.close();
-  }
+	}
 }
 </script>
 <style>
