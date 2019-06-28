@@ -14,7 +14,7 @@
 				</div>
 				
 					<div class="column" style="background: #00d0b6">
-						<img src="@/assets/yape_logo.png" style="display: block; margin-left: auto; margin-right: auto; width: 25%;">
+						<img src="http://localhost:8080/imgs/yape_logo.png" style="display: block; margin-left: auto; margin-right: auto; width: 25%;">
 						<div style="display:inline-block; padding: 30px">
 							<div>1. Entra a Yape desde tu smartphone</div>
 							<div>2. Ingresa a Yape con tu clave de 6 d&iacutegitos</div>
@@ -36,7 +36,7 @@
 							</div>
 							<img
 								v-if="!showQr" 
-								src="@/assets/loading.gif"
+								src="http://localhost:8080/imgs/loading.gif"
 								alt="QR Placeholder"
 								height="200px"
 							/>
@@ -44,10 +44,10 @@
 						<div>
 							<p>Yape disponible en:</p>
 							<a target="_blank" href="https://itunes.apple.com/pe/app/yape/id1147249919">
-								<img src="@/assets/app_store.png" alt="App Store on" width="100px"/>
+								<img src="http://localhost:8080/imgs/app_store.png" alt="App Store on" width="100px"/>
 							</a>
 							<a target="_blank" href="https://play.google.com/store/apps/details?id=com.bcp.innovacxion.yapeapp">
-								<img src="@/assets/google_play.png" alt="Google Play on" width="100px"/>
+								<img src="http://localhost:8080/imgs/google_play.png" alt="Google Play on" width="100px"/>
 							</a>
 						</div>
 					</div>
