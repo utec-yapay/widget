@@ -71,6 +71,7 @@ import company_info from '../new_company.json'
 let sseServer
 
 export default {
+  props: ['paymentJwt'],
   name: 'app',
   components: {
     QrcodeVue
@@ -96,11 +97,12 @@ export default {
   		sseServer.close()
   	},
   	getQr: function() {
-			console.log("Company info")
-			console.log(company_info)
-			this.cinfo = company_info
-			console.log(this.cinfo.company)
-			console.log("End company info")
+  		/*
+		console.log("Company info")
+		console.log(company_info)
+		this.cinfo = company_info
+		console.log(this.cinfo.company)
+		console.log("End company info")
   		console.log("getqr start")
   		const paymentUrl = "http://localhost:8080/payments"
   		let data = {
@@ -122,6 +124,12 @@ export default {
 		  	.catch(error =>{
 		  		console.log("error: " + error)
 		  	})
+		 */
+		this.qrValue = this.paymentJwt
+		this.showQr = true
+		let decoded = VueJwtDecode.decode(this.paymentJwt)
+		console.log(decoded)
+		this.openSseConnection(decoded.pid)
 		  
   	},
   	openSseConnection: function(id) {
