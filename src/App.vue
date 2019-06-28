@@ -6,7 +6,6 @@
 
 		<div v-if="showPopup" id="popupBoxOnePosition">
 			<div class="popupBoxContent">
-				<p>jwt: {{ $root.paymentjwt }}</p>
 				<div v-if="!confirmed">
 				<div style="background: #00d0b6; width: 50%; float: right; padding: 10px;">
 					<div class="exit">
@@ -103,7 +102,7 @@ export default {
 		this.showQr = true
 		this.decoded = VueJwtDecode.decode(this.paymentjwt)
 		console.log(this.decoded)
-		this.openSseConnection(decoded.pid)
+		this.openSseConnection(this.decoded.pid)
 		this.refreshQrTimer = setInterval(this.updateQr, 60000)
   	},
   	openSseConnection: function(id) {
@@ -136,19 +135,20 @@ export default {
 	  		})
   	},
   	updateQr: function() {
+  		console.log("Grabbing new qr")
   		let url = "http://localhost:8080/payments/jwt"
 
-  		let config = {
-  			headers: {
-  				pid: this.decoded.pid
-  			}
-  		}
-
   		let self = this
-  		axios.get(url, null, config)
+  		let myHeaders = { pid: this.decoded.pid }
+  		axios.get(url, { headers: myHeaders })
   			.then(newJwt => {
-  				self.qrValue = newJwt
-  				self.decoded = VueJwtDecode.decode(self.newJwt)
+  				console.log(newJwt.data)
+  				self.qrValue = newJwt.data
+  				console.log("QrValue")
+  				console.log(self.qrValue)
+  				self.decoded = VueJwtDecode.decode(newJwt.data)
+  				console.log("Decoded")
+  				console.log(self.decoded)
   			})
   			.catch(error => {
   				console.log(error)
