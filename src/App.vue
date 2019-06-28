@@ -103,7 +103,7 @@ export default {
 		this.decoded = VueJwtDecode.decode(this.paymentjwt)
 		console.log(this.decoded)
 		this.openSseConnection(this.decoded.pid)
-		this.refreshQrTimer = setInterval(this.updateQr, 60000)
+		this.refreshQrTimer = setInterval(this.updateQr, 20000)
   	},
   	openSseConnection: function(id) {
   		console.log("openSseConnection start")
