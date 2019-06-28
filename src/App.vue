@@ -82,8 +82,9 @@ export default {
   		showPopup: false,
   		qrValue: "",
   		showQr: false,
-			confirmed: false, //change to false later
-			cinfo: null
+		confirmed: false, //change to true later
+		decoded: null,
+		refreshQrTimer: null
   	}
   },
   methods: {
@@ -98,12 +99,12 @@ export default {
   		sseServer.close()
   	},
   	getQr: function() {
-		console.log(this.paymentjwt)
 		this.qrValue = this.paymentjwt
 		this.showQr = true
-		let decoded = VueJwtDecode.decode(this.paymentjwt)
-		console.log(decoded)
+		this.decoded = VueJwtDecode.decode(this.paymentjwt)
+		console.log(this.decoded)
 		this.openSseConnection(decoded.pid)
+		this.refreshQrTimer = setInterval(this.updateQr, 60000)
   	},
   	openSseConnection: function(id) {
   		console.log("openSseConnection start")
@@ -117,31 +118,48 @@ export default {
 	  			sse.onError(error => {
 	  				console.log("Lost connection. Trying to reconnect...", error)
 	  				self.confirmed = false
-	  				//sse.close()
 	  			})
 
 	  			sse.subscribe('yapay-confirm-payment', (signal) => {
 	  				console.log("Received signal: " + signal)
 	  				console.log("Closing connection...")
 	  				self.confirmed = true
+	  				// Stop refreshing the QR
+	  				clearInterval(self.refreshQrTimer)
 	  				sse.close()
 	  			})
 	  		})
 	  		.catch(error => {
-	  			// When this error is caught, it means the initial connection to the
+	  		// When this error is caught, it means the initial connection to the
 	        // events server failed.  No automatic attempts to reconnect will be made.
 	        console.log('Failed to connect to server', err);
 	  		})
   	},
   	updateQr: function() {
+  		let url = "http://localhost:8080/payments/jwt"
 
+  		let config = {
+  			headers: {
+  				pid: this.decoded.pid
+  			}
+  		}
+
+  		let self = this
+  		axios.get(url, null, config)
+  			.then(newJwt => {
+  				self.qrValue = newJwt
+  				self.decoded = VueJwtDecode.decode(self.newJwt)
+  			})
+  			.catch(error => {
+  				console.log(error)
+  			})
   	}
   },
   beforeDestroy() {
   	// Make sure to close the connection with the events server
     // when the component is destroyed, or we'll have ghost connections!
     sseServer.close();
-	}
+  }
 }
 </script>
 <style>
