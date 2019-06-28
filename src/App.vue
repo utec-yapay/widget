@@ -125,12 +125,11 @@ export default {
 		  		console.log("error: " + error)
 		  	})
 		 */
-		this.qrValue = this.paymentJwt
+		this.qrValue = $root.paymentJwt
 		this.showQr = true
-		let decoded = VueJwtDecode.decode(this.paymentJwt)
+		let decoded = VueJwtDecode.decode($root.paymentJwt)
 		console.log(decoded)
 		this.openSseConnection(decoded.pid)
-		  
   	},
   	openSseConnection: function(id) {
   		console.log("openSseConnection start")
@@ -159,6 +158,9 @@ export default {
 	        // events server failed.  No automatic attempts to reconnect will be made.
 	        console.log('Failed to connect to server', err);
 	  		})
+  	},
+  	updateQr: function() {
+
   	}
   },
   beforeDestroy() {
