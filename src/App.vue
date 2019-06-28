@@ -53,7 +53,7 @@
 						</div>
 					</div>
 				</div>
-				<a :href="cinfo['confirmation_url']" v-if="confirmed">Confirmed, click to continue</a>
+				<a :href="confirmationpage" v-if="confirmed">Confirmed, click to continue</a>
 			</div>
 		</div>
   </div>
@@ -72,7 +72,7 @@ import company_info from '../new_company.json'
 let sseServer
 
 export default {
-  props: ['paymentjwt'],
+  props: ['paymentjwt', 'confirmationpage'],
   name: 'app',
   components: {
     QrcodeVue
