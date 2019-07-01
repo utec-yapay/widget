@@ -6,14 +6,12 @@
 
 		<div v-if="showPopup" id="popupBoxOnePosition">
 			<div class="popupBoxContent">
-				<div v-if="!confirmed">
-				<div style="background: #00d0b6; width: 50%; float: right; padding: 10px;">
-					<div class="exit">
-						<a href="#" style="text-decoration: none; color: black;" v-on:click="closePopup()">&times;</a>
-					</div>
-				</div>
+				<div style="background: rgb(0, 208, 182); overflow: hidden; padding:10px 15px;" v-if="!confirmed">
+                    <div style="font-size: 30px; width: 100%; text-align: right;">
+                        <a href="#" style="color: black;" v-on:click="closePopup()">&times;</a>
+                    </div>
 				
-					<div class="column" style="background: #00d0b6">
+					<div style="float: right; width: 50%">
 						<img src="http://localhost:8080/imgs/yape_logo.png" style="display: block; margin-left: auto; margin-right: auto; width: 25%;">
 						<div style="display:inline-block; padding: 30px">
 							<div>1. Entra a Yape desde tu smartphone</div>
@@ -24,33 +22,32 @@
 						</div>
 					</div>
 
-					<div style="padding-left: 20px; padding-top: 20px">
-						<div style="display: inline-block;">
-							<qrcode-vue
-								v-if="showQr"
-								:value="qrValue"
-								:size="200">
-							</qrcode-vue>
-							<div>
-								
-							</div>
-							<img
-								v-if="!showQr" 
-								src="http://localhost:8080/imgs/loading.gif"
-								alt="QR Placeholder"
-								height="200px"
-							/>
-						</div>
-						<div>
-							<p>Yape disponible en:</p>
-							<a target="_blank" href="https://itunes.apple.com/pe/app/yape/id1147249919">
-								<img src="http://localhost:8080/imgs/app_store.png" alt="App Store on" width="100px"/>
-							</a>
-							<a target="_blank" href="https://play.google.com/store/apps/details?id=com.bcp.innovacxion.yapeapp">
-								<img src="http://localhost:8080/imgs/google_play.png" alt="Google Play on" width="100px"/>
-							</a>
-						</div>
-					</div>
+                    <div style="display: inline-block; padding: 30px 30px 0px">
+                        <qrcode-vue
+                            v-if="showQr"
+                            :value="qrValue"
+                            :size="200">
+                        </qrcode-vue>
+                        <div>
+                            
+                        </div>
+                        <img
+                            v-if="!showQr" 
+                            src="http://localhost:8080/imgs/loading.gif"
+                            alt="QR Placeholder"
+                            height="200px"
+                        />
+                    </div>
+
+                    <div>
+                            <p>Yape disponible en:</p>
+                            <a target="_blank" href="https://itunes.apple.com/pe/app/yape/id1147249919">
+                                <img src="http://localhost:8080/imgs/app_store.png" alt="App Store on" width="100px"/>
+                            </a>
+                            <a target="_blank" href="https://play.google.com/store/apps/details?id=com.bcp.innovacxion.yapeapp">
+                                <img src="http://localhost:8080/imgs/google_play.png" alt="Google Play on" width="100px"/>
+                            </a>
+                        </div>
 				</div>
 				<a :href="confirmationpage" v-if="confirmed">Confirmed, click to continue</a>
 			</div>
