@@ -2,7 +2,7 @@
 
 <template>
   <div id="app">
-		<button @click="openPopup()">Yapay</button>
+		<span @click="openPopup()">Yapay</span>
 
 		<div v-if="showPopup" id="popupBoxOnePosition">
 			<div class="popupBoxContent">
@@ -13,7 +13,7 @@
 				
 					<div style="float: right; width: 50%">
 						<img src="http://localhost:8080/imgs/yape_logo.png" style="display: block; margin-left: auto; margin-right: auto; width: 25%;">
-						<div style="display:inline-block; padding: 30px">
+						<div style="display:inline-block; padding: 30px; color: black !important">
 							<div>1. Entra a Yape desde tu smartphone</div>
 							<div>2. Ingresa a Yape con tu clave de 6 d&iacutegitos</div>
 							<div>3. Haz click en el bot&oacuten con el s&iacutembolo QR</div>
@@ -40,7 +40,7 @@
                     </div>
 
                     <div>
-                            <p>Yape disponible en:</p>
+                            <p style="color: black !important">Yape disponible en:</p>
                             <a target="_blank" href="https://itunes.apple.com/pe/app/yape/id1147249919">
                                 <img src="http://localhost:8080/imgs/app_store.png" alt="App Store on" width="100px"/>
                             </a>
@@ -49,7 +49,17 @@
                             </a>
                         </div>
 				</div>
-				<a :href="confirmationpage" v-if="confirmed">Confirmed, click to continue</a>
+				<div v-if="confirmed" style="text-align: center; background: rgb(0, 208, 182)">
+					<div style="padding: 70px">
+						<h1 style="font-weight: bold; color: #562844">
+							¡Confirmado!
+						</h1>
+						<p style="color: #562844">Gracias por pagar con Yape</p>
+					</div>
+					<div style="background: rgb(108,30,125); padding: 20px;">
+						<a :href="confirmationpage" style="color: #F7FEF8">HAZ CLICK PARA CONTINUAR</a>
+					</div>
+				</div>
 			</div>
 		</div>
   </div>
@@ -183,13 +193,13 @@ export default {
     float: left;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center !important;
 }
 .second {
     float: right;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center !important;
 }
 .img{
     height: auto;
